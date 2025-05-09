@@ -7,6 +7,7 @@ import CImage.Observers.Events.*;
 import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
+import ImageProcessing.Lineaire.FiltrageLineaireGlobal;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
 import java.io.*;
@@ -68,6 +69,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void initComponents() {
 
         buttonGroupDessiner = new javax.swing.ButtonGroup();
+        jFileChooser1 = new javax.swing.JFileChooser();
         jScrollPane = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuImage = new javax.swing.JMenu();
@@ -97,6 +99,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemFourierAfficherPartieImaginaire = new javax.swing.JMenuItem();
         jMenuHistogramme = new javax.swing.JMenu();
         jMenuHistogrammeAfficher = new javax.swing.JMenuItem();
+        jMenuFiltrageLineaire = new javax.swing.JMenu();
+        jMenuGlobal = new javax.swing.JMenu();
+        jMenuItemPasseBasIdeal = new javax.swing.JMenuItem();
+        jMenuItemPasseHautIdeal = new javax.swing.JMenuItem();
+        jMenuItemPasseBasButterworth = new javax.swing.JMenuItem();
+        jMenuItemPasseHautButterworth = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -286,6 +294,42 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuHistogramme);
 
+        jMenuFiltrageLineaire.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/vector.png"))); // NOI18N
+        jMenuFiltrageLineaire.setText("Transformation Lineaire");
+
+        jMenuGlobal.setText("Global");
+
+        jMenuItemPasseBasIdeal.setText("Passe-bas ideal");
+        jMenuItemPasseBasIdeal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemPasseBasIdealActionPerformed(evt);
+            }
+        });
+        jMenuGlobal.add(jMenuItemPasseBasIdeal);
+
+        jMenuItemPasseHautIdeal.setText("Passe-haut ideal");
+        jMenuGlobal.add(jMenuItemPasseHautIdeal);
+
+        jMenuItemPasseBasButterworth.setText("Passe-bas Butterworth");
+        jMenuItemPasseBasButterworth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemPasseBasButterworthActionPerformed(evt);
+            }
+        });
+        jMenuGlobal.add(jMenuItemPasseBasButterworth);
+
+        jMenuItemPasseHautButterworth.setText("Passe-haut Butterworth");
+        jMenuItemPasseHautButterworth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemPasseHautButterworthActionPerformed(evt);
+            }
+        });
+        jMenuGlobal.add(jMenuItemPasseHautButterworth);
+
+        jMenuFiltrageLineaire.add(jMenuGlobal);
+
+        jMenuBar1.add(jMenuFiltrageLineaire);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -294,18 +338,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(500, 400));
+        setSize(new java.awt.Dimension(753, 488));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -644,6 +688,27 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
 	}
     }//GEN-LAST:event_jMenuItemOuvrirRGBActionPerformed
+
+    private void jMenuItemPasseBasButterworthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPasseBasButterworthActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemPasseBasButterworthActionPerformed
+
+    private void jMenuItemPasseHautButterworthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPasseHautButterworthActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemPasseHautButterworthActionPerformed
+
+    private void jMenuItemPasseBasIdealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPasseBasIdealActionPerformed
+        // TODO add your handling code here:
+        // Demander la fréquence de coupure
+        //String input = JOptionPane.showInputDialog(this, "Fréquence de coupure :");
+        //if (input == null) return; // Annulé
+        //int fc = Integer.parseInt(input);
+        
+
+        // Appel au traitement (à adapter à ton système d’image)
+        //int[][] resultat = FiltrageLineaireGlobal.filtrePasseBasIdeal(imageActuelle, fc);
+        //afficherImage(resultat);
+    }//GEN-LAST:event_jMenuItemPasseBasIdealActionPerformed
     
     /**
      * @param args the command line arguments
@@ -772,10 +837,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerPixel;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectangle;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectanglePlein;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuDessiner;
+    private javax.swing.JMenu jMenuFiltrageLineaire;
     private javax.swing.JMenu jMenuFourier;
     private javax.swing.JMenu jMenuFourierAfficher;
+    private javax.swing.JMenu jMenuGlobal;
     private javax.swing.JMenu jMenuHistogramme;
     private javax.swing.JMenuItem jMenuHistogrammeAfficher;
     private javax.swing.JMenu jMenuImage;
@@ -789,6 +857,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemNouvelleRGB;
     private javax.swing.JMenuItem jMenuItemOuvrirNG;
     private javax.swing.JMenuItem jMenuItemOuvrirRGB;
+    private javax.swing.JMenuItem jMenuItemPasseBasButterworth;
+    private javax.swing.JMenuItem jMenuItemPasseBasIdeal;
+    private javax.swing.JMenuItem jMenuItemPasseHautButterworth;
+    private javax.swing.JMenuItem jMenuItemPasseHautIdeal;
     private javax.swing.JMenu jMenuNouvelle;
     private javax.swing.JMenu jMenuOuvrir;
     private javax.swing.JMenuItem jMenuQuitter;
