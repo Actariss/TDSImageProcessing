@@ -1,5 +1,8 @@
 package ImageProcessing.Lineaire;
 
+import ImageProcessing.Complexe.*;
+import ImageProcessing.Fourier.Fourier;
+
 public class FiltrageLineaireGlobal {
 
     /**
@@ -9,12 +12,56 @@ public class FiltrageLineaireGlobal {
      * @return Image filtrée.
      */
     public static int[][] filtrePasseBasIdeal(int[][] image, int frequenceCoupure) {
-        // TODO : Appliquer la FFT sur l'image
-        // TODO : Construire un masque passe-bas idéal (cercle de rayon frequenceCoupure)
-        // TODO : Appliquer le masque à la transformée
-        // TODO : Appliquer la transformée inverse (iFFT)
-        // TODO : Retourner l'image en niveaux de gris
-        return null;
+        int M = image.length;
+        int N = image[0].length;
+
+        double[][] f = new double[M][N];
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                f[i][j] = (double) image[i][j];
+            }
+        }
+        
+        MatriceComplexe fourier = Fourier.Fourier2D(f);
+        
+        fourier = Fourier.decroise(fourier);
+        
+        int centreM = M / 2;
+        int centreN = N / 2;
+        
+        for (int u = 0; u < M; u++) {
+            for (int v = 0; v < N; v++) {
+                // Calculer la distance au centre
+                double distance = Math.sqrt((u - centreM) * (u - centreM) + (v - centreN) * (v - centreN));
+                
+                // Si la distance est supérieure à la fréquence de coupure, mettre à zéro
+                if (distance > frequenceCoupure) {
+                    fourier.set(u, v, 0.0, 0.0);
+                }
+            }
+        }
+        
+        fourier = Fourier.decroise(fourier);
+        
+        MatriceComplexe resultatComplex = Fourier.InverseFourier2D(fourier);
+        
+        double[][] resultatDouble = resultatComplex.getPartieReelle();
+        int[][] resultt = new int[M][N];
+        
+        // Normalisation et conversion en entiers
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                
+                int valeur = (int) Math.round(resultatDouble[i][j]);
+                // Limiter les valeurs entre 0 et 255 (Pour une img sinon caca)
+                if (valeur < 0) valeur = 0;
+                if (valeur > 255) valeur = 255;
+                resultt[i][j] = valeur;
+            }
+        }
+        
+        return result
+        
     }
 
     /**
