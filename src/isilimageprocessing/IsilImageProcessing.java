@@ -310,6 +310,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuGlobal.add(jMenuItemPasseBasIdeal);
 
         jMenuItemPasseHautIdeal.setText("Passe-haut ideal");
+        jMenuItemPasseHautIdeal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemPasseHautIdealActionPerformed(evt);
+            }
+        });
         jMenuGlobal.add(jMenuItemPasseHautIdeal);
 
         jMenuItemPasseBasButterworth.setText("Passe-bas Butterworth");
@@ -717,6 +722,25 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemPasseBasIdealActionPerformed
+
+    private void jMenuItemPasseHautIdealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPasseHautIdealActionPerformed
+        try {
+            // TODO add your handling code here:
+            // Demander la fréquence de coupure
+            String input = JOptionPane.showInputDialog(this, "Fréquence de coupure :");
+            if (input == null) return; // Annulé
+            int fc = Integer.parseInt(input);
+            var img = imageNG.getMatrice();
+            int[][] matriceFiltree = FiltrageLineaireGlobal.filtrePasseHautIdeal(img, fc);
+            CImageNG imagefiltree = new CImageNG(matriceFiltree);
+            observer.setCImage(imagefiltree);
+            // Appel au traitement (à adapter à ton système d’image)
+            //int[][] resultat = FiltrageLineaireGlobal.filtrePasseBasIdeal(imageActuelle, fc);
+            //afficherImage(resultat);
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemPasseHautIdealActionPerformed
     
     /**
      * @param args the command line arguments
