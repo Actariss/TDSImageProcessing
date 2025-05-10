@@ -46,7 +46,7 @@ public class FiltrageLineaireGlobal {
         MatriceComplexe resultatComplex = Fourier.InverseFourier2D(fourier);
         
         double[][] resultatDouble = resultatComplex.getPartieReelle();
-        int[][] resultt = new int[M][N];
+        int[][] result = new int[M][N];
         
         // Normalisation et conversion en entiers
         for (int i = 0; i < M; i++) {
@@ -56,11 +56,11 @@ public class FiltrageLineaireGlobal {
                 // Limiter les valeurs entre 0 et 255 (Pour une img sinon caca)
                 if (valeur < 0) valeur = 0;
                 if (valeur > 255) valeur = 255;
-                resultt[i][j] = valeur;
+                result[i][j] = valeur;
             }
         }
         
-        return result
+        return result;
         
     }
 
