@@ -7,7 +7,7 @@ import CImage.Observers.Events.*;
 import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
-import ImageProcessing.Lineaire.FiltrageLineaireGlobal;
+import ImageProcessing.Lineaire.*;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
 import java.io.*;
@@ -107,6 +107,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemPasseHautIdeal = new javax.swing.JMenuItem();
         jMenuItemPasseBasButterworth = new javax.swing.JMenuItem();
         jMenuItemPasseHautButterworth = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -334,6 +336,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuGlobal.add(jMenuItemPasseHautButterworth);
 
         jMenuFiltrageLineaire.add(jMenuGlobal);
+
+        jMenu1.setText("Local");
+
+        jMenuItem1.setText("Convolution");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuConvolution(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuFiltrageLineaire.add(jMenu1);
 
         jMenuBar1.add(jMenuFiltrageLineaire);
 
@@ -756,6 +770,46 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemPasseHautIdealActionPerformed
+
+    private void jMenuConvolution(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuConvolution
+        try {
+            // Demander la taille du masque
+            String input = JOptionPane.showInputDialog(this, "Taille du masque (impaire):");
+            if (input == null) return;
+            int tailleMasque = Integer.parseInt(input);
+
+            // Vérifier que la taille est impaire
+            if (tailleMasque % 2 == 0) {
+                JOptionPane.showMessageDialog(this, "La taille du masque doit être impaire!", 
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int[][] img = imageNG.getMatrice();
+
+            // On crée le masque de taille nxn
+            double[][] masque = new double[tailleMasque][tailleMasque];
+            double valeur = 1.0 / (tailleMasque * tailleMasque);
+
+            for (int i = 0; i < tailleMasque; i++) {
+                for (int j = 0; j < tailleMasque; j++) {
+                    masque[i][j] = valeur;
+                }
+            }
+
+            // Appliquer le filtre
+            int[][] matriceFiltree = FiltrageLineaireLocal.filtreMasqueConvolution(img, masque);
+            CImageNG imageFiltree = new CImageNG(matriceFiltree);
+            observer.setCImage(imageFiltree);
+            imageNG = imageFiltree;
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Valeur numérique invalide!", 
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuConvolution
     
     /**
      * @param args the command line arguments
@@ -885,6 +939,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectangle;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectanglePlein;
     private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuDessiner;
     private javax.swing.JMenu jMenuFiltrageLineaire;
@@ -894,6 +949,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuHistogramme;
     private javax.swing.JMenuItem jMenuHistogrammeAfficher;
     private javax.swing.JMenu jMenuImage;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
     private javax.swing.JMenuItem jMenuItemFourierAfficherModule;
