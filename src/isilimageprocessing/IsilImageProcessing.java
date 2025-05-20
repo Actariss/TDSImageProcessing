@@ -722,7 +722,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
     private void jMenuItemPasseBasButterworthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPasseBasButterworthActionPerformed
         try {
-            // TODO add your handling code here:
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             // Demander la fréquence de coupure
             String input = JOptionPane.showInputDialog(this, "Fréquence de coupure :");
             if (input == null) return; // Annulé
@@ -745,7 +750,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
     private void jMenuItemPasseBasIdealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPasseBasIdealActionPerformed
         try {
-            // TODO add your handling code here:
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             // Demander la fréquence de coupure
             String input = JOptionPane.showInputDialog(this, "Fréquence de coupure :");
             if (input == null) return; // Annulé
@@ -764,7 +774,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
     private void jMenuItemPasseHautIdealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPasseHautIdealActionPerformed
         try {
-            // TODO add your handling code here:
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             // Demander la fréquence de coupure
             String input = JOptionPane.showInputDialog(this, "Fréquence de coupure :");
             if (input == null) return; // Annulé
@@ -783,6 +798,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
     private void jMenuConvolution(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuConvolution
         try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             // Demander la taille du masque
             String input = JOptionPane.showInputDialog(this, "Taille du masque (impaire):");
             if (input == null) return;
@@ -823,6 +844,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
     private void jMenuMoyenneurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMoyenneurActionPerformed
         try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             // Demander la taille du masque
             String input = JOptionPane.showInputDialog(this, "Taille du masque (nombre impair):", "3");
             if (input == null) {
