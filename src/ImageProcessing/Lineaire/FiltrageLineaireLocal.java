@@ -65,6 +65,22 @@ public class FiltrageLineaireLocal {
      * @return Image filtrée.
      */
     public static int[][] filtreMoyenneur(int[][] image, int tailleMasque) {
-        return null;
+        // Vérifier que la taille du masque est impaire
+        if (tailleMasque % 2 == 0) {
+            throw new IllegalArgumentException("La taille du masque doit être impaire");
+        }
+        
+        // Créer le masque moyenneur
+        double[][] masque = new double[tailleMasque][tailleMasque];
+        double valeur = 1.0 / (tailleMasque * tailleMasque);
+        
+        // Initialiser tous les coefficients du masque à la même valeur (1)
+        for (int i = 0; i < tailleMasque; i++) {
+            for (int j = 0; j < tailleMasque; j++) {
+                masque[i][j] = valeur;
+            }
+        }
+        
+        return filtreMasqueConvolution(image, masque);
     }
 }
