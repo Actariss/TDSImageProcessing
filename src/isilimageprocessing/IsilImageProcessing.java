@@ -109,6 +109,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemPasseHautButterworth = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -346,6 +347,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
         });
         jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setActionCommand("Moyenneur");
+        jMenuItem2.setLabel("Moyenneur");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuMoyenneurActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
 
         jMenuFiltrageLineaire.add(jMenu1);
 
@@ -810,6 +820,37 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                     "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jMenuConvolution
+
+    private void jMenuMoyenneurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMoyenneurActionPerformed
+        try {
+            // Demander la taille du masque
+            String input = JOptionPane.showInputDialog(this, "Taille du masque (nombre impair):", "3");
+            if (input == null) {
+                return;
+            }
+            int tailleMasque = Integer.parseInt(input);
+            if (tailleMasque % 2 == 0) {
+                JOptionPane.showMessageDialog(this, "La taille du masque doit être impaire.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+
+            // Appliquer le filtre moyenneur
+            int[][] matriceFiltree = FiltrageLineaireLocal.filtreMoyenneur(img, tailleMasque);
+            CImageNG imageFiltree = new CImageNG(matriceFiltree);
+            observer.setCImage(imageFiltree);
+            imageNG = imageFiltree;
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Valeur numérique invalide!",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuMoyenneurActionPerformed
     
     /**
      * @param args the command line arguments
@@ -950,6 +991,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuHistogrammeAfficher;
     private javax.swing.JMenu jMenuImage;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
     private javax.swing.JMenuItem jMenuItemFourierAfficherModule;
