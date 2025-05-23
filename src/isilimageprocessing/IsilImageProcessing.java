@@ -8,6 +8,7 @@ import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
 import ImageProcessing.Lineaire.*;
+import ImageProcessing.NonLineaire.MorphoComplexe;
 import ImageProcessing.NonLineaire.MorphoElementaire;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
@@ -414,12 +415,27 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuMorphoComplexe.setText("Morpho Complexe");
 
         jMenuItemDilatationGeo.setText("Dilatation Geodesique");
+        jMenuItemDilatationGeo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemDilatationGeoActionPerformed(evt);
+            }
+        });
         jMenuMorphoComplexe.add(jMenuItemDilatationGeo);
 
         jMenuItemReconstructionGeo.setText("Reconstruction Geodesique");
+        jMenuItemReconstructionGeo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemReconstructionGeoActionPerformed(evt);
+            }
+        });
         jMenuMorphoComplexe.add(jMenuItemReconstructionGeo);
 
         jMenuItemFiltreMedian.setText("Filtre Median");
+        jMenuItemFiltreMedian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFiltreMedianActionPerformed(evt);
+            }
+        });
         jMenuMorphoComplexe.add(jMenuItemFiltreMedian);
 
         jMenuFiltrageNonLineaire.add(jMenuMorphoComplexe);
@@ -434,18 +450,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 941, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1096, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(967, 488));
+        setSize(new java.awt.Dimension(1124, 528));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1092,6 +1108,142 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemFermetureActionPerformed
+
+    private void jMenuItemFiltreMedianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltreMedianActionPerformed
+        try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Demander la taille du masque
+            String input = JOptionPane.showInputDialog(this, "Taille du masque (nombre impair):", "3");
+            if (input == null) {
+                return;
+            }
+            int tailleMasque = Integer.parseInt(input);
+            if (tailleMasque % 2 == 0) {
+                JOptionPane.showMessageDialog(this, "La taille du masque doit être impaire.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+
+            // Appliquer l'erosion
+            int[][] matriceFermee = MorphoComplexe.filtreMedian(img, tailleMasque);
+            CImageNG imageFiltree = new CImageNG(matriceFermee);
+            observer.setCImage(imageFiltree);
+            imageNG = imageFiltree;
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Valeur numérique invalide!",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        } 
+        catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemFiltreMedianActionPerformed
+
+    private void jMenuItemDilatationGeoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDilatationGeoActionPerformed
+    JFileChooser choix = new JFileChooser();
+    File fichier;
+
+    choix.setCurrentDirectory(new File("."));
+    if (choix.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        fichier = choix.getSelectedFile();
+        if (fichier != null) {
+            try {
+                // Chargement de l'image en tant que masque géodésique
+                CImageNG imageMasqueGeodesique = new CImageNG(fichier);
+
+                // Vérification que le masque est de la même taille que l’image de base
+                if (imageNG == null) {
+                    JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image principale.");
+                    imageMasqueGeodesique = null;
+                    return;
+                }
+
+                if (imageMasqueGeodesique.getLargeur() != imageNG.getLargeur()
+                    || imageMasqueGeodesique.getHauteur() != imageNG.getHauteur()) {
+                    JOptionPane.showMessageDialog(this, "Le masque géodésique doit avoir la même taille que l’image de base.");
+                    imageMasqueGeodesique = null;
+                    return;
+                }
+
+                // Confirmation
+                if (imageNG != null && imageMasqueGeodesique != null) {
+                int[][] imageMat = imageNG.getMatrice();
+                int[][] masqueMat = imageMasqueGeodesique.getMatrice();
+                String input = JOptionPane.showInputDialog(this, "Nombre d'itérations", "3");
+                if (input == null) {
+                    return;
+                }
+                int nbIter = Integer.parseInt(input);
+                int[][] resultat = MorphoComplexe.dilatationGeodesique(imageMat, masqueMat, nbIter);
+
+                // Créer une nouvelle CImageNG et l'afficher
+                CImageNG resultatImage = new CImageNG(resultat);
+                observer.setCImage(resultatImage);
+}
+
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Erreur lors du chargement du masque : " + ex.getMessage());
+            } catch (CImageNGException ex) {
+                Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    }//GEN-LAST:event_jMenuItemDilatationGeoActionPerformed
+
+    private void jMenuItemReconstructionGeoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemReconstructionGeoActionPerformed
+    JFileChooser choix = new JFileChooser();
+    File fichier;
+
+    choix.setCurrentDirectory(new File("."));
+    if (choix.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        fichier = choix.getSelectedFile();
+        if (fichier != null) {
+            try {
+                // Chargement de l'image en tant que masque géodésique
+                CImageNG imageMasqueGeodesique = new CImageNG(fichier);
+
+                // Vérification que le masque est de la même taille que l’image de base
+                if (imageNG == null) {
+                    JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image principale.");
+                    imageMasqueGeodesique = null;
+                    return;
+                }
+
+                if (imageMasqueGeodesique.getLargeur() != imageNG.getLargeur()
+                    || imageMasqueGeodesique.getHauteur() != imageNG.getHauteur()) {
+                    JOptionPane.showMessageDialog(this, "Le masque géodésique doit avoir la même taille que l’image de base.");
+                    imageMasqueGeodesique = null;
+                    return;
+                }
+
+                // Confirmation
+                if (imageNG != null && imageMasqueGeodesique != null) {
+                int[][] imageMat = imageNG.getMatrice();
+                int[][] masqueMat = imageMasqueGeodesique.getMatrice();
+                int[][] resultat = MorphoComplexe.reconstructionGeodesique(imageMat, masqueMat);
+
+                // Créer une nouvelle CImageNG et l'afficher
+                CImageNG resultatImage = new CImageNG(resultat);
+                observer.setCImage(resultatImage);
+}
+
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Erreur lors du chargement du masque : " + ex.getMessage());
+            } catch (CImageNGException ex) {
+                Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    }//GEN-LAST:event_jMenuItemReconstructionGeoActionPerformed
     
     /**
      * @param args the command line arguments
