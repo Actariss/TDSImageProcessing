@@ -44,8 +44,32 @@ public class MorphoElementaire {
      * @return image dilatée
      */
     public static int[][] dilatation(int[][] image, int tailleMasque) {
-        // TODO : Implémenter la dilatation (max dans le voisinage)
-        return null;
+    int largeur = image.length;
+            int hauteur = image[0].length;
+            int[][] resultat = new int[largeur][hauteur];
+
+            int demiMasque = tailleMasque / 2;
+
+            for (int x = 0; x < largeur; x++) {
+                for (int y = 0; y < hauteur; y++) {
+                    int max = 0; // Valeur max en niveaux de gris
+
+                    for (int i = -demiMasque; i <= demiMasque; i++) {
+                        for (int j = -demiMasque; j <= demiMasque; j++) {
+                            int nx = x + i;
+                            int ny = y + j;
+
+                            if (nx >= 0 && nx < largeur && ny >= 0 && ny < hauteur) {
+                                max = Math.max(max, image[nx][ny]);
+                            }
+                        }
+                    }
+
+                    resultat[x][y] = max;
+                }
+            }
+
+        return resultat;
     }
 
     /**
