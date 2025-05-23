@@ -117,6 +117,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemDilatation = new javax.swing.JMenuItem();
         jMenuItemOuverture = new javax.swing.JMenuItem();
         jMenuItemFermeture = new javax.swing.JMenuItem();
+        jMenuMorphoComplexe = new javax.swing.JMenu();
+        jMenuItemDilatationGeo = new javax.swing.JMenuItem();
+        jMenuItemReconstructionGeo = new javax.swing.JMenuItem();
+        jMenuItemFiltreMedian = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -406,6 +410,19 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuMorphoElementaire.add(jMenuItemFermeture);
 
         jMenuFiltrageNonLineaire.add(jMenuMorphoElementaire);
+
+        jMenuMorphoComplexe.setText("Morpho Complexe");
+
+        jMenuItemDilatationGeo.setText("Dilatation Geodesique");
+        jMenuMorphoComplexe.add(jMenuItemDilatationGeo);
+
+        jMenuItemReconstructionGeo.setText("Reconstruction Geodesique");
+        jMenuMorphoComplexe.add(jMenuItemReconstructionGeo);
+
+        jMenuItemFiltreMedian.setText("Filtre Median");
+        jMenuMorphoComplexe.add(jMenuItemFiltreMedian);
+
+        jMenuFiltrageNonLineaire.add(jMenuMorphoComplexe);
 
         jMenuBar1.add(jMenuFiltrageNonLineaire);
 
@@ -1219,9 +1236,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemDilatation;
+    private javax.swing.JMenuItem jMenuItemDilatationGeo;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
     private javax.swing.JMenuItem jMenuItemErosion;
     private javax.swing.JMenuItem jMenuItemFermeture;
+    private javax.swing.JMenuItem jMenuItemFiltreMedian;
     private javax.swing.JMenuItem jMenuItemFourierAfficherModule;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieImaginaire;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieReelle;
@@ -1235,6 +1254,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemPasseBasIdeal;
     private javax.swing.JMenuItem jMenuItemPasseHautButterworth;
     private javax.swing.JMenuItem jMenuItemPasseHautIdeal;
+    private javax.swing.JMenuItem jMenuItemReconstructionGeo;
+    private javax.swing.JMenu jMenuMorphoComplexe;
     private javax.swing.JMenu jMenuMorphoElementaire;
     private javax.swing.JMenu jMenuNouvelle;
     private javax.swing.JMenu jMenuOuvrir;

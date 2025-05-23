@@ -358,6 +358,28 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenuMorphoComplexe">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Morpho Complexe"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemDilatationGeo">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Dilatation Geodesique"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemReconstructionGeo">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Reconstruction Geodesique"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFiltreMedian">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Filtre Median"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
           </SubComponents>
         </Menu>
       </SubComponents>
