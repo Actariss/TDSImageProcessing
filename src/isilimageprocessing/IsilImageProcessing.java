@@ -8,6 +8,7 @@ import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
 import ImageProcessing.Lineaire.*;
+import ImageProcessing.NonLineaire.MorphoElementaire;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
 import java.io.*;
@@ -110,6 +111,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuFiltrageNonLineaire = new javax.swing.JMenu();
+        jMenuMorphoElementaire = new javax.swing.JMenu();
+        jMenuItemErosion = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -361,6 +368,32 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuFiltrageLineaire);
 
+        jMenuFiltrageNonLineaire.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/non-linear-icon.png"))); // NOI18N
+        jMenuFiltrageNonLineaire.setText("Transformation Non-Linéaire");
+
+        jMenuMorphoElementaire.setText("Morpho Elementaire");
+
+        jMenuItemErosion.setText("Erosion");
+        jMenuItemErosion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemErosionActionPerformed(evt);
+            }
+        });
+        jMenuMorphoElementaire.add(jMenuItemErosion);
+
+        jMenuItem4.setText("jMenuItem4");
+        jMenuMorphoElementaire.add(jMenuItem4);
+
+        jMenuItem5.setText("jMenuItem5");
+        jMenuMorphoElementaire.add(jMenuItem5);
+
+        jMenuItem6.setText("jMenuItem6");
+        jMenuMorphoElementaire.add(jMenuItem6);
+
+        jMenuFiltrageNonLineaire.add(jMenuMorphoElementaire);
+
+        jMenuBar1.add(jMenuFiltrageNonLineaire);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -369,18 +402,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 941, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(753, 488));
+        setSize(new java.awt.Dimension(967, 488));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -878,6 +911,44 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuMoyenneurActionPerformed
+
+    private void jMenuItemErosionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemErosionActionPerformed
+        // TODO add your handling code here:
+        try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Demander la taille du masque
+            String input = JOptionPane.showInputDialog(this, "Taille du masque (nombre impair):", "3");
+            if (input == null) {
+                return;
+            }
+            int tailleMasque = Integer.parseInt(input);
+            if (tailleMasque % 2 == 0) {
+                JOptionPane.showMessageDialog(this, "La taille du masque doit être impaire.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+
+            // Appliquer l'erosion
+            int[][] matriceErodee = MorphoElementaire.erosion(img, tailleMasque);
+            CImageNG imageFiltree = new CImageNG(matriceErodee);
+            observer.setCImage(imageFiltree);
+            imageNG = imageFiltree;
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Valeur numérique invalide!",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        } 
+        catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemErosionActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1011,6 +1082,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuDessiner;
     private javax.swing.JMenu jMenuFiltrageLineaire;
+    private javax.swing.JMenu jMenuFiltrageNonLineaire;
     private javax.swing.JMenu jMenuFourier;
     private javax.swing.JMenu jMenuFourierAfficher;
     private javax.swing.JMenu jMenuGlobal;
@@ -1019,8 +1091,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuImage;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
+    private javax.swing.JMenuItem jMenuItemErosion;
     private javax.swing.JMenuItem jMenuItemFourierAfficherModule;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieImaginaire;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieReelle;
@@ -1033,6 +1109,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemPasseBasIdeal;
     private javax.swing.JMenuItem jMenuItemPasseHautButterworth;
     private javax.swing.JMenuItem jMenuItemPasseHautIdeal;
+    private javax.swing.JMenu jMenuMorphoElementaire;
     private javax.swing.JMenu jMenuNouvelle;
     private javax.swing.JMenu jMenuOuvrir;
     private javax.swing.JMenuItem jMenuQuitter;
