@@ -114,9 +114,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuFiltrageNonLineaire = new javax.swing.JMenu();
         jMenuMorphoElementaire = new javax.swing.JMenu();
         jMenuItemErosion = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItemDilatation = new javax.swing.JMenuItem();
+        jMenuItemOuverture = new javax.swing.JMenuItem();
+        jMenuItemFermeture = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -381,14 +381,29 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuMorphoElementaire.add(jMenuItemErosion);
 
-        jMenuItem4.setText("jMenuItem4");
-        jMenuMorphoElementaire.add(jMenuItem4);
+        jMenuItemDilatation.setText("Dilatation");
+        jMenuItemDilatation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemDilatationActionPerformed(evt);
+            }
+        });
+        jMenuMorphoElementaire.add(jMenuItemDilatation);
 
-        jMenuItem5.setText("jMenuItem5");
-        jMenuMorphoElementaire.add(jMenuItem5);
+        jMenuItemOuverture.setText("Ouverture");
+        jMenuItemOuverture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemOuvertureActionPerformed(evt);
+            }
+        });
+        jMenuMorphoElementaire.add(jMenuItemOuverture);
 
-        jMenuItem6.setText("jMenuItem6");
-        jMenuMorphoElementaire.add(jMenuItem6);
+        jMenuItemFermeture.setText("Fermeture");
+        jMenuItemFermeture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFermetureActionPerformed(evt);
+            }
+        });
+        jMenuMorphoElementaire.add(jMenuItemFermeture);
 
         jMenuFiltrageNonLineaire.add(jMenuMorphoElementaire);
 
@@ -949,6 +964,117 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemErosionActionPerformed
+
+    private void jMenuItemDilatationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDilatationActionPerformed
+    try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Demander la taille du masque
+            String input = JOptionPane.showInputDialog(this, "Taille du masque (nombre impair):", "3");
+            if (input == null) {
+                return;
+            }
+            int tailleMasque = Integer.parseInt(input);
+            if (tailleMasque % 2 == 0) {
+                JOptionPane.showMessageDialog(this, "La taille du masque doit être impaire.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+
+            // Appliquer l'erosion
+            int[][] matriceDilatee = MorphoElementaire.dilatation(img, tailleMasque);
+            CImageNG imageFiltree = new CImageNG(matriceDilatee);
+            observer.setCImage(imageFiltree);
+            imageNG = imageFiltree;
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Valeur numérique invalide!",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        } 
+        catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemDilatationActionPerformed
+
+    private void jMenuItemOuvertureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOuvertureActionPerformed
+        try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Demander la taille du masque
+            String input = JOptionPane.showInputDialog(this, "Taille du masque (nombre impair):", "3");
+            if (input == null) {
+                return;
+            }
+            int tailleMasque = Integer.parseInt(input);
+            if (tailleMasque % 2 == 0) {
+                JOptionPane.showMessageDialog(this, "La taille du masque doit être impaire.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+
+            // Appliquer l'erosion
+            int[][] matriceOuverte = MorphoElementaire.ouverture(img, tailleMasque);
+            CImageNG imageFiltree = new CImageNG(matriceOuverte);
+            observer.setCImage(imageFiltree);
+            imageNG = imageFiltree;
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Valeur numérique invalide!",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        } 
+        catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemOuvertureActionPerformed
+
+    private void jMenuItemFermetureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFermetureActionPerformed
+    try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Demander la taille du masque
+            String input = JOptionPane.showInputDialog(this, "Taille du masque (nombre impair):", "3");
+            if (input == null) {
+                return;
+            }
+            int tailleMasque = Integer.parseInt(input);
+            if (tailleMasque % 2 == 0) {
+                JOptionPane.showMessageDialog(this, "La taille du masque doit être impaire.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+
+            // Appliquer l'erosion
+            int[][] matriceFermee = MorphoElementaire.fermeture(img, tailleMasque);
+            CImageNG imageFiltree = new CImageNG(matriceFermee);
+            observer.setCImage(imageFiltree);
+            imageNG = imageFiltree;
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Valeur numérique invalide!",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        } 
+        catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemFermetureActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1091,18 +1217,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuImage;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
+    private javax.swing.JMenuItem jMenuItemDilatation;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
     private javax.swing.JMenuItem jMenuItemErosion;
+    private javax.swing.JMenuItem jMenuItemFermeture;
     private javax.swing.JMenuItem jMenuItemFourierAfficherModule;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieImaginaire;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieReelle;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPhase;
     private javax.swing.JMenuItem jMenuItemNouvelleNG;
     private javax.swing.JMenuItem jMenuItemNouvelleRGB;
+    private javax.swing.JMenuItem jMenuItemOuverture;
     private javax.swing.JMenuItem jMenuItemOuvrirNG;
     private javax.swing.JMenuItem jMenuItemOuvrirRGB;
     private javax.swing.JMenuItem jMenuItemPasseBasButterworth;
