@@ -9,8 +9,32 @@ public class MorphoElementaire {
      * @return image érodée
      */
     public static int[][] erosion(int[][] image, int tailleMasque) {
-        // TODO : Implémenter l'érosion (min dans le voisinage)
-        return null;
+    int largeur = image.length;
+        int hauteur = image[0].length;
+        int[][] resultat = new int[largeur][hauteur];
+
+        int demiMasque = tailleMasque / 2;
+
+        for (int x = 0; x < largeur; x++) {
+            for (int y = 0; y < hauteur; y++) {
+                int min = 255; // Valeur max en niveaux de gris
+
+                for (int i = -demiMasque; i <= demiMasque; i++) {
+                    for (int j = -demiMasque; j <= demiMasque; j++) {
+                        int nx = x + i;
+                        int ny = y + j;
+
+                        if (nx >= 0 && nx < largeur && ny >= 0 && ny < hauteur) {
+                            min = Math.min(min, image[nx][ny]);
+                        }
+                    }
+                }
+
+                resultat[x][y] = min;
+            }
+        }
+
+        return resultat;
     }
 
     /**
