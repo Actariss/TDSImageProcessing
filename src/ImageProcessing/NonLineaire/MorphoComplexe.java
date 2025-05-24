@@ -22,7 +22,13 @@ public class MorphoComplexe {
     public static int[][] dilatationGeodesique(int[][] image, int[][] masqueGeodesique, int nbIter) {
     int largeur = image.length;
     int hauteur = image[0].length;
-    int[][] resultat = image;
+    int[][] resultat = new int[largeur][hauteur];
+    
+    for (int i = 0; i < largeur; i++) {
+        for (int j = 0; j < hauteur; j++) {
+            resultat[i][j] = image[i][j];
+        }
+    }
 
     for (int iter = 0; iter < nbIter; iter++) {
         int[][] dilate = MorphoElementaire.dilatation(resultat, 3); // masque 3x3 par défaut
