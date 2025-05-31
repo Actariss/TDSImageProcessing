@@ -5,11 +5,14 @@ import CImage.Exceptions.*;
 import CImage.Observers.*;
 import CImage.Observers.Events.*;
 import ImageProcessing.Complexe.MatriceComplexe;
+import ImageProcessing.Contours.ContoursLineaire;
+import ImageProcessing.Contours.ContoursNonLineaire;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
 import ImageProcessing.Lineaire.*;
 import ImageProcessing.NonLineaire.MorphoComplexe;
 import ImageProcessing.NonLineaire.MorphoElementaire;
+import ImageProcessing.Seuillage.Seuillage;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
 import java.io.*;
@@ -129,6 +132,21 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemDilatationGeo = new javax.swing.JMenuItem();
         jMenuItemReconstructionGeo = new javax.swing.JMenuItem();
         jMenuItemFiltreMedian = new javax.swing.JMenuItem();
+        jMenuContours = new javax.swing.JMenu();
+        jMenuContoursLineaire = new javax.swing.JMenu();
+        jMenuItemGradientPrewitt = new javax.swing.JMenuItem();
+        jMenuItemGradientSobel = new javax.swing.JMenuItem();
+        jMenuItemLaplacien4 = new javax.swing.JMenuItem();
+        jMenuItemLaplacien8 = new javax.swing.JMenuItem();
+        jMenuContoursNonLineaire = new javax.swing.JMenu();
+        jMenuItemGradientErosion = new javax.swing.JMenuItem();
+        jMenuItemGradientDilatation = new javax.swing.JMenuItem();
+        jMenuItemGradientBeucher = new javax.swing.JMenuItem();
+        jMenuItemLaplacienNonLin = new javax.swing.JMenuItem();
+        jMenuSeuillage = new javax.swing.JMenu();
+        jMenuItemSeuillageSimple = new javax.swing.JMenuItem();
+        jMenuItemSeuillageDouble = new javax.swing.JMenuItem();
+        jMenuItemSeuillageAutomatique = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -501,6 +519,112 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuFiltrageNonLineaire);
 
+        jMenuContours.setText("Contours");
+        jMenuContours.setToolTipText("");
+
+        jMenuContoursLineaire.setText("Linéaire");
+        jMenuContoursLineaire.setToolTipText("");
+
+        jMenuItemGradientPrewitt.setText("Gradient de Prewitt");
+        jMenuItemGradientPrewitt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGradientPrewittActionPerformed(evt);
+            }
+        });
+        jMenuContoursLineaire.add(jMenuItemGradientPrewitt);
+
+        jMenuItemGradientSobel.setText("Gradient de Sobel");
+        jMenuItemGradientSobel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGradientSobelActionPerformed(evt);
+            }
+        });
+        jMenuContoursLineaire.add(jMenuItemGradientSobel);
+
+        jMenuItemLaplacien4.setText("Laplacien 4");
+        jMenuItemLaplacien4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLaplacien4ActionPerformed(evt);
+            }
+        });
+        jMenuContoursLineaire.add(jMenuItemLaplacien4);
+
+        jMenuItemLaplacien8.setText("Laplacien 8");
+        jMenuItemLaplacien8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLaplacien8ActionPerformed(evt);
+            }
+        });
+        jMenuContoursLineaire.add(jMenuItemLaplacien8);
+
+        jMenuContours.add(jMenuContoursLineaire);
+
+        jMenuContoursNonLineaire.setText("Non-Linéaire");
+
+        jMenuItemGradientErosion.setText("Gradient d'érosion");
+        jMenuItemGradientErosion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGradientErosionActionPerformed(evt);
+            }
+        });
+        jMenuContoursNonLineaire.add(jMenuItemGradientErosion);
+
+        jMenuItemGradientDilatation.setText("Gradient de dilatation");
+        jMenuItemGradientDilatation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGradientDilatationActionPerformed(evt);
+            }
+        });
+        jMenuContoursNonLineaire.add(jMenuItemGradientDilatation);
+
+        jMenuItemGradientBeucher.setText("Gradient de Beucher");
+        jMenuItemGradientBeucher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGradientBeucherActionPerformed(evt);
+            }
+        });
+        jMenuContoursNonLineaire.add(jMenuItemGradientBeucher);
+
+        jMenuItemLaplacienNonLin.setText("Laplacien non-linéaire");
+        jMenuItemLaplacienNonLin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLaplacienNonLinActionPerformed(evt);
+            }
+        });
+        jMenuContoursNonLineaire.add(jMenuItemLaplacienNonLin);
+
+        jMenuContours.add(jMenuContoursNonLineaire);
+
+        jMenuBar1.add(jMenuContours);
+
+        jMenuSeuillage.setText("Seuillage");
+
+        jMenuItemSeuillageSimple.setText("Seuillage simple");
+        jMenuItemSeuillageSimple.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSeuillageSimpleActionPerformed(evt);
+            }
+        });
+        jMenuSeuillage.add(jMenuItemSeuillageSimple);
+
+        jMenuItemSeuillageDouble.setText("Seuillage double");
+        jMenuItemSeuillageDouble.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSeuillageDoubleActionPerformed(evt);
+            }
+        });
+        jMenuSeuillage.add(jMenuItemSeuillageDouble);
+
+        jMenuItemSeuillageAutomatique.setText("Seuillage automatique");
+        jMenuItemSeuillageAutomatique.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSeuillageAutomatiqueActionPerformed(evt);
+            }
+        });
+        jMenuSeuillage.add(jMenuItemSeuillageAutomatique);
+
+        jMenuBar1.add(jMenuSeuillage);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -516,7 +640,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1519,6 +1643,244 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
 
     }//GEN-LAST:event_jMenuItemEgalisationHistogrammeActionPerformed
+    private int demanderDirection(String titre) {
+        String[] options = {"Horizontal", "Vertical"};
+        int choix = JOptionPane.showOptionDialog(this,
+                "Choisissez la direction :",
+                titre,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+
+        if (choix == JOptionPane.CLOSED_OPTION) return -1;
+
+        return (choix == 0) ? 1 : 2;
+    }
+
+    private void jMenuItemGradientPrewittActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGradientPrewittActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            int dir = demanderDirection("Gradient de Prewitt");
+            int[][] resultat = ContoursLineaire.gradientPrewitt(img, dir);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+    }//GEN-LAST:event_jMenuItemGradientPrewittActionPerformed
+
+    private void jMenuItemGradientSobelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGradientSobelActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            int dir = demanderDirection("Gradient de Sobel");
+            int[][] resultat = ContoursLineaire.gradientPrewitt(img, dir);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemGradientSobelActionPerformed
+
+    private void jMenuItemLaplacien4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLaplacien4ActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            int[][] resultat = ContoursLineaire.laplacien4(img);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemLaplacien4ActionPerformed
+
+    private void jMenuItemLaplacien8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLaplacien8ActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            int[][] resultat = ContoursLineaire.laplacien8(img);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemLaplacien8ActionPerformed
+
+    private void jMenuItemGradientErosionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGradientErosionActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            int[][] resultat = ContoursNonLineaire.gradientErosion(img);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemGradientErosionActionPerformed
+
+    private void jMenuItemGradientDilatationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGradientDilatationActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            int[][] resultat = ContoursNonLineaire.gradientDilatation(img);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemGradientDilatationActionPerformed
+
+    private void jMenuItemGradientBeucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGradientBeucherActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            int[][] resultat = ContoursNonLineaire.gradientBeucher(img);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemGradientBeucherActionPerformed
+
+    private void jMenuItemLaplacienNonLinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLaplacienNonLinActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            int[][] resultat = ContoursNonLineaire.laplacienNonLineaire(img);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemLaplacienNonLinActionPerformed
+
+    private void jMenuItemSeuillageDoubleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageDoubleActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            String seuil1Str = JOptionPane.showInputDialog(this, "Seuil 1:");
+            String seuil2Str = JOptionPane.showInputDialog(this, "Seuil 2:");
+
+            if (seuil1Str == null || seuil2Str == null) return; // utilisateur a annulé
+
+            int seuil1 = Integer.parseInt(seuil1Str);
+            int seuil2 = Integer.parseInt(seuil2Str);
+            int[][] resultat = Seuillage.seuillageDouble(img, seuil1, seuil2);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemSeuillageDoubleActionPerformed
+
+    private void jMenuItemSeuillageSimpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageSimpleActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            String seuilStr = JOptionPane.showInputDialog(this, "Seuil :");
+            if (seuilStr == null) return;
+            int seuil = Integer.parseInt(seuilStr);
+            
+            int[][] resultat = Seuillage.seuillageSimple(img, seuil);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemSeuillageSimpleActionPerformed
+
+    private void jMenuItemSeuillageAutomatiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageAutomatiqueActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            int[][] resultat = Seuillage.seuillageAutomatique(img);
+            
+            CImageNG resultatImage = new CImageNG(resultat);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemSeuillageAutomatiqueActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1650,6 +2012,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuContours;
+    private javax.swing.JMenu jMenuContoursLineaire;
+    private javax.swing.JMenu jMenuContoursNonLineaire;
     private javax.swing.JMenu jMenuDessiner;
     private javax.swing.JMenu jMenuFiltrageLineaire;
     private javax.swing.JMenu jMenuFiltrageNonLineaire;
@@ -1674,6 +2039,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieImaginaire;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieReelle;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPhase;
+    private javax.swing.JMenuItem jMenuItemGradientBeucher;
+    private javax.swing.JMenuItem jMenuItemGradientDilatation;
+    private javax.swing.JMenuItem jMenuItemGradientErosion;
+    private javax.swing.JMenuItem jMenuItemGradientPrewitt;
+    private javax.swing.JMenuItem jMenuItemGradientSobel;
+    private javax.swing.JMenuItem jMenuItemLaplacien4;
+    private javax.swing.JMenuItem jMenuItemLaplacien8;
+    private javax.swing.JMenuItem jMenuItemLaplacienNonLin;
     private javax.swing.JMenuItem jMenuItemNegatif;
     private javax.swing.JMenuItem jMenuItemNouvelleNG;
     private javax.swing.JMenuItem jMenuItemNouvelleRGB;
@@ -1685,6 +2058,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemPasseHautButterworth;
     private javax.swing.JMenuItem jMenuItemPasseHautIdeal;
     private javax.swing.JMenuItem jMenuItemReconstructionGeo;
+    private javax.swing.JMenuItem jMenuItemSeuillageAutomatique;
+    private javax.swing.JMenuItem jMenuItemSeuillageDouble;
+    private javax.swing.JMenuItem jMenuItemSeuillageSimple;
     private javax.swing.JMenuItem jMenuItemTransformationLineaire;
     private javax.swing.JMenuItem jMenuItemTransformationLineaireSaturation;
     private javax.swing.JMenu jMenuMorphoComplexe;
@@ -1692,6 +2068,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuNouvelle;
     private javax.swing.JMenu jMenuOuvrir;
     private javax.swing.JMenuItem jMenuQuitter;
+    private javax.swing.JMenu jMenuSeuillage;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
