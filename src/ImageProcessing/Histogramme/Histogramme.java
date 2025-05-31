@@ -16,4 +16,14 @@ public class Histogramme
         
         return histo;
     }
+    public static int minimum(int[][] image)
+    {
+        int [] histo = Histogramme256(image);
+        for (int i = 0; i < histo.length; i++) {
+            if (histo[i] > 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
