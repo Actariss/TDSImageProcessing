@@ -36,4 +36,15 @@ public class Histogramme
         }
         return -1;
     }
+    public static int luminance(int[][] image) 
+    {
+        int[] histo = Histogramme256(image);
+        int totalPixels = image.length * image[0].length;
+        long somme = 0;
+
+        for (int i = 0; i < histo.length; i++) {
+            somme += i * histo[i];
+        }
+        return (int)(somme / totalPixels);
+    }
 }
