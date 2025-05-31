@@ -18,8 +18,18 @@ public class Histogramme
     }
     public static int minimum(int[][] image)
     {
-        int [] histo = Histogramme256(image);
+        int[] histo = Histogramme256(image);
         for (int i = 0; i < histo.length; i++) {
+            if (histo[i] > 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public static int maximum(int[][] image)
+    {
+        int[] histo = Histogramme256(image);
+        for (int i = histo.length - 1; i >= 0; i--) {
             if (histo[i] > 0) {
                 return i;
             }
