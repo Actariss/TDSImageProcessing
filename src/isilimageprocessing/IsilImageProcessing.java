@@ -103,6 +103,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemFourierAfficherPartieImaginaire = new javax.swing.JMenuItem();
         jMenuHistogramme = new javax.swing.JMenu();
         jMenuHistogrammeAfficher = new javax.swing.JMenuItem();
+        menuItemAfficherParametres = new javax.swing.JMenuItem();
         jMenuFiltrageLineaire = new javax.swing.JMenu();
         jMenuGlobal = new javax.swing.JMenu();
         jMenuItemPasseBasIdeal = new javax.swing.JMenuItem();
@@ -308,6 +309,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
         });
         jMenuHistogramme.add(jMenuHistogrammeAfficher);
+
+        menuItemAfficherParametres.setText("Afficher les paramètres de l’image ");
+        menuItemAfficherParametres.setToolTipText("");
+        menuItemAfficherParametres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemAfficherParametresActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(menuItemAfficherParametres);
 
         jMenuBar1.add(jMenuHistogramme);
 
@@ -1244,6 +1254,39 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
     }
     }//GEN-LAST:event_jMenuItemReconstructionGeoActionPerformed
+
+    private void menuItemAfficherParametresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAfficherParametresActionPerformed
+        try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image
+            int[][] img = imageNG.getMatrice();
+            //Récuperer les infos
+            int min = Histogramme.minimum(img);
+            int max = Histogramme.maximum(img);
+            int lum = Histogramme.luminance(img);
+            double c1 = Histogramme.contraste1(img);
+            double c2 = Histogramme.contraste2(img);
+            
+            String message = String.format("""
+                Paramètres de l’image :
+
+                Valeur minimale : %d
+                Valeur maximale : %d
+                Luminance : %d
+                Contraste 1 (écart-type) : %.2f
+                Contraste 2 (plage normalisée) : %.2f
+                """, min, max, lum, c1, c2
+            );
+            JOptionPane.showMessageDialog(this, message, "Paramètres de l’image", JOptionPane.INFORMATION_MESSAGE);
+        } catch (CImageNGException ex) {
+                Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_menuItemAfficherParametresActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1415,6 +1458,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JMenuItem menuItemAfficherParametres;
     // End of variables declaration//GEN-END:variables
     
 }
