@@ -47,4 +47,25 @@ public class Histogramme
         }
         return (int)(somme / totalPixels);
     }
+    public static double contraste1(int[][] image)
+    {
+        int[] histo = Histogramme256(image);
+        int totalPixels = image.length * image[0].length;
+        double lumi = luminance(image);
+        double somme = 0;
+
+        for (int i = 0; i < histo.length; i++) {
+            somme += Math.pow(i - lumi, 2) * histo[i];
+        }
+        return Math.sqrt(somme / totalPixels);
+    }
+    public static double contraste2(int[][] image)
+    {
+        int min = minimum(image);
+        int max = maximum(image);
+
+        if ((max + min) == 0) return 0.0;
+
+        return (double)(max - min) / (max + min);
+    }
 }
