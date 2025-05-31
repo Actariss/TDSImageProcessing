@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
@@ -103,7 +104,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemFourierAfficherPartieImaginaire = new javax.swing.JMenuItem();
         jMenuHistogramme = new javax.swing.JMenu();
         jMenuHistogrammeAfficher = new javax.swing.JMenuItem();
-        menuItemAfficherParametres = new javax.swing.JMenuItem();
+        javax.swing.JMenuItem jMenuItemAfficherParametres = new javax.swing.JMenuItem();
+        jMenuItemTransformationLineaire = new javax.swing.JMenuItem();
+        jMenuItemTransformationLineaireSaturation = new javax.swing.JMenuItem();
+        jMenuItemCorrectionGamma = new javax.swing.JMenuItem();
+        jMenuItemNegatif = new javax.swing.JMenuItem();
+        jMenuItemEgalisationHistogramme = new javax.swing.JMenuItem();
         jMenuFiltrageLineaire = new javax.swing.JMenu();
         jMenuGlobal = new javax.swing.JMenu();
         jMenuItemPasseBasIdeal = new javax.swing.JMenuItem();
@@ -310,14 +316,57 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuHistogramme.add(jMenuHistogrammeAfficher);
 
-        menuItemAfficherParametres.setText("Afficher les paramètres de l’image ");
-        menuItemAfficherParametres.setToolTipText("");
-        menuItemAfficherParametres.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemAfficherParametres.setText("Afficher les paramètres de l’image ");
+        jMenuItemAfficherParametres.setToolTipText("");
+        jMenuItemAfficherParametres.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItemAfficherParametresActionPerformed(evt);
+                jMenuItemAfficherParametresActionPerformed(evt);
             }
         });
-        jMenuHistogramme.add(menuItemAfficherParametres);
+        jMenuHistogramme.add(jMenuItemAfficherParametres);
+
+        jMenuItemTransformationLineaire.setText("Transformation linéaire");
+        jMenuItemTransformationLineaire.setToolTipText("");
+        jMenuItemTransformationLineaire.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTransformationLineaireActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemTransformationLineaire);
+
+        jMenuItemTransformationLineaireSaturation.setText("Transformation linéaire avec saturation");
+        jMenuItemTransformationLineaireSaturation.setToolTipText("");
+        jMenuItemTransformationLineaireSaturation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTransformationLineaireSaturationActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemTransformationLineaireSaturation);
+
+        jMenuItemCorrectionGamma.setText("Correction gamma");
+        jMenuItemCorrectionGamma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCorrectionGammaActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemCorrectionGamma);
+
+        jMenuItemNegatif.setText("Négatif");
+        jMenuItemNegatif.setToolTipText("");
+        jMenuItemNegatif.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemNegatifActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemNegatif);
+
+        jMenuItemEgalisationHistogramme.setText("Égalisation de l’histogramme");
+        jMenuItemEgalisationHistogramme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEgalisationHistogrammeActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemEgalisationHistogramme);
 
         jMenuBar1.add(jMenuHistogramme);
 
@@ -1255,7 +1304,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }
     }//GEN-LAST:event_jMenuItemReconstructionGeoActionPerformed
 
-    private void menuItemAfficherParametresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAfficherParametresActionPerformed
+    private void jMenuItemAfficherParametresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAfficherParametresActionPerformed
         try {
             // Vérifier que l'image en niveaux de gris est chargée
             if (imageNG == null) {
@@ -1286,8 +1335,191 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         } catch (CImageNGException ex) {
                 Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_menuItemAfficherParametresActionPerformed
-    
+    }//GEN-LAST:event_jMenuItemAfficherParametresActionPerformed
+    public void afficherHistogrammesAvantApres(int[][] avant, int[][] apres) {
+        JPanel panel = new JPanel(new GridLayout(1, 2));
+
+        ChartPanel chartPanelAvant = new ChartPanel(creerChartHistogramme(avant, "Avant"));
+        ChartPanel chartPanelApres = new ChartPanel(creerChartHistogramme(apres, "Après"));
+
+        panel.add(chartPanelAvant);
+        panel.add(chartPanelApres);
+
+        JFrame frame = new JFrame("Histogrammes Avant / Après");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setContentPane(panel);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    private JFreeChart creerChartHistogramme(int[][] imageData, String titre) {
+        int[] histo = Histogramme.Histogramme256(imageData);
+        XYSeries serie = new XYSeries("Histo");
+        for (int i = 0; i < 256; i++) serie.add(i, histo[i]);
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(serie);
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+            titre,
+            "Niveaux de gris",
+            "Nombre de pixels",
+            dataset,
+            PlotOrientation.VERTICAL,
+            false, false, false
+        );
+
+        XYPlot plot = (XYPlot) chart.getXYPlot();
+        plot.getDomainAxis().setRange(0, 255);
+        return chart;
+    }
+
+    private void jMenuItemTransformationLineaireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTransformationLineaireActionPerformed
+        try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image et les params
+            int[][] avant = imageNG.getMatrice();
+            int smin = Histogramme.minimum(avant);
+            int smax = Histogramme.maximum(avant);
+            
+            // Créer la courbe tonale et l'appliquer
+            int[] courbe = Histogramme.creeCourbeTonaleLineaireSaturation(smin, smax);
+            int[][] apres = Histogramme.rehaussement(avant, courbe);
+            
+            afficherHistogrammesAvantApres(avant, apres);
+            
+            // Créer une nouvelle CImageNG et l'afficher
+            CImageNG resultatImage = new CImageNG(apres);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+                Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemTransformationLineaireActionPerformed
+
+    private void jMenuItemTransformationLineaireSaturationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTransformationLineaireSaturationActionPerformed
+        try {
+            // Vérifier que l'image en niveaux de gris est chargée
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Récupérer la matrice de l'image et les params
+            int[][] avant = imageNG.getMatrice();
+            String sminStr = JOptionPane.showInputDialog(this, "Valeur de smin (0 à 255) :");
+            String smaxStr = JOptionPane.showInputDialog(this, "Valeur de smax (0 à 255) :");
+
+            if (sminStr == null || smaxStr == null) return; // utilisateur a annulé
+
+            int smin = Integer.parseInt(sminStr);
+            int smax = Integer.parseInt(smaxStr);
+
+            if (smin >= smax || smin < 0 || smax > 255) {
+                JOptionPane.showMessageDialog(this, "Valeurs invalides pour smin/smax.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Créer la courbe tonale et l'appliquer
+            int[] courbe = Histogramme.creeCourbeTonaleLineaireSaturation(smin, smax);
+            int[][] apres = Histogramme.rehaussement(avant, courbe);
+            
+            afficherHistogrammesAvantApres(avant, apres);
+            
+            // Créer une nouvelle CImageNG et l'afficher
+            CImageNG resultatImage = new CImageNG(apres);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+                Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemTransformationLineaireSaturationActionPerformed
+
+    private void jMenuItemCorrectionGammaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCorrectionGammaActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int[][] avant = imageNG.getMatrice();
+            String gammaStr = JOptionPane.showInputDialog(this, "Valeur de gamma :");
+
+            if (gammaStr == null) return; // utilisateur a annulé
+
+            double gamma = Double.parseDouble(gammaStr);
+
+            if (gamma <= 0) {
+                JOptionPane.showMessageDialog(this, "Gamma doit être strictement positif.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int[] courbe = Histogramme.creeCourbeTonaleGamma(gamma);
+            int[][] apres = Histogramme.rehaussement(avant, courbe);
+
+            afficherHistogrammesAvantApres(avant, apres);
+
+            CImageNG resultatImage = new CImageNG(apres);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Entrée invalide pour gamma.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_jMenuItemCorrectionGammaActionPerformed
+
+    private void jMenuItemNegatifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNegatifActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int[][] avant = imageNG.getMatrice();
+            int[] courbe = Histogramme.creeCourbeTonaleNegatif();
+            int[][] apres = Histogramme.rehaussement(avant, courbe);
+
+            afficherHistogrammesAvantApres(avant, apres);
+
+            CImageNG resultatImage = new CImageNG(apres);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemNegatifActionPerformed
+
+    private void jMenuItemEgalisationHistogrammeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEgalisationHistogrammeActionPerformed
+        try {
+            if (imageNG == null) {
+                JOptionPane.showMessageDialog(this, "Veuillez d'abord charger une image en niveaux de gris.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int[][] avant = imageNG.getMatrice();
+
+            int[] courbe = Histogramme.creeCourbeTonaleEgalisation(avant);
+            int[][] apres = Histogramme.rehaussement(avant, courbe);
+            afficherHistogrammesAvantApres(avant, apres);
+
+            CImageNG resultatImage = new CImageNG(apres);
+            observer.setCImage(resultatImage);
+
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jMenuItemEgalisationHistogrammeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1429,9 +1661,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuImage;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItemCorrectionGamma;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemDilatation;
     private javax.swing.JMenuItem jMenuItemDilatationGeo;
+    private javax.swing.JMenuItem jMenuItemEgalisationHistogramme;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
     private javax.swing.JMenuItem jMenuItemErosion;
     private javax.swing.JMenuItem jMenuItemFermeture;
@@ -1440,6 +1674,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieImaginaire;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieReelle;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPhase;
+    private javax.swing.JMenuItem jMenuItemNegatif;
     private javax.swing.JMenuItem jMenuItemNouvelleNG;
     private javax.swing.JMenuItem jMenuItemNouvelleRGB;
     private javax.swing.JMenuItem jMenuItemOuverture;
@@ -1450,6 +1685,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemPasseHautButterworth;
     private javax.swing.JMenuItem jMenuItemPasseHautIdeal;
     private javax.swing.JMenuItem jMenuItemReconstructionGeo;
+    private javax.swing.JMenuItem jMenuItemTransformationLineaire;
+    private javax.swing.JMenuItem jMenuItemTransformationLineaireSaturation;
     private javax.swing.JMenu jMenuMorphoComplexe;
     private javax.swing.JMenu jMenuMorphoElementaire;
     private javax.swing.JMenu jMenuNouvelle;
@@ -1458,7 +1695,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JMenuItem menuItemAfficherParametres;
     // End of variables declaration//GEN-END:variables
     
 }
