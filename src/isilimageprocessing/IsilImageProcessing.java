@@ -17,6 +17,7 @@ import ImageProcessing.Seuillage.Seuillage;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
 import java.io.*;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -654,6 +655,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuApplications.add(jMenuItemApplication2);
 
         jMenuItemApplication3.setText("Application 3");
+        jMenuItemApplication3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemApplication3ActionPerformed(evt);
+            }
+        });
         jMenuApplications.add(jMenuItemApplication3);
 
         jMenuItemApplication4.setText("Application 4");
@@ -2023,22 +2029,46 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
     private void jMenuItemApplication2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplication2ActionPerformed
         try {
-            // Charger directement les fichiers depuis les chemins connus
             File fichier = new File("ImagesFournies/ImagesEtape5/lenaAEgaliser.jpg");
             if (!fichier.exists()) {
                 JOptionPane.showMessageDialog(this, "Fichier lenaAEgaliser.jpg introuvable.",
                         "Erreur", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            // Création de l'objet imageNG depuis les fichiers
+            // Création des objets images depuis le fichier
             CImageRGB image = new CImageRGB(fichier);
+            CImageNG imageNG = new CImageNG(fichier);
             // Traitement
-            CImageRGB resultat = Applications.application2a(image);
-            afficherAvantApres("Traitement (a) - Avant / Après", image, resultat);
-        } catch (IOException | CImageRGBException ex) {
+            CImageRGB resultatA = Applications.application2a(image);
+            CImageRGB resultatB = Applications.application2b(image, imageNG);
+            afficherAvantApres("Traitement (a) - Avant / Après", image, resultatA);
+            afficherAvantApres("Traitement (b) - Avant / Après", image, resultatB);
+        } catch (IOException | CImageRGBException | CImageNGException ex) {
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemApplication2ActionPerformed
+
+    private void jMenuItemApplication3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplication3ActionPerformed
+        try {
+            // Charger directement les fichiers depuis les chemins connus
+            File fichier = new File("ImagesFournies/ImagesEtape5/petitsPois.png");
+            if (!fichier.exists()) {
+                JOptionPane.showMessageDialog(this, "Fichier petitsPois.png introuvable.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Création de l'objet imageNG depuis les fichiers
+            CImageRGB image = new CImageRGB(fichier);
+            // Traitement
+            Map<String, int[][]> resultat = Applications.application3(image);
+            CImageNG imageResultatR = new CImageNG(resultat.get("R"));
+            CImageNG imageResultatB = new CImageNG(resultat.get("B"));
+            afficherAvantApres("Pois rouge - Avant / Après", image, imageResultatR);
+            afficherAvantApres("Pois bleu - Avant / Après", image, imageResultatB);
+        } catch (IOException | CImageNGException | CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemApplication3ActionPerformed
 
     /**
      * @param args the command line arguments
