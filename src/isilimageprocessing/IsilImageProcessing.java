@@ -646,6 +646,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuItemApplication2.setText("Application 2");
         jMenuItemApplication2.setToolTipText("");
+        jMenuItemApplication2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemApplication2ActionPerformed(evt);
+            }
+        });
         jMenuApplications.add(jMenuItemApplication2);
 
         jMenuItemApplication3.setText("Application 3");
@@ -1942,7 +1947,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
     }//GEN-LAST:event_jMenuItemSeuillageAutomatiqueActionPerformed
 
-    private void afficherAvantApres(String titre, CImageNG avant, CImageNG apres) {
+    private void afficherAvantApres(String titre, CImage avant, CImage apres) {
         // Créer une nouvelle fenêtre (non modale)
         JFrame frame = new JFrame(titre);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -2015,6 +2020,25 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemApplication1ActionPerformed
+
+    private void jMenuItemApplication2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplication2ActionPerformed
+        try {
+            // Charger directement les fichiers depuis les chemins connus
+            File fichier = new File("ImagesFournies/ImagesEtape5/lenaAEgaliser.jpg");
+            if (!fichier.exists()) {
+                JOptionPane.showMessageDialog(this, "Fichier lenaAEgaliser.jpg introuvable.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Création de l'objet imageNG depuis les fichiers
+            CImageRGB image = new CImageRGB(fichier);
+            // Traitement
+            CImageRGB resultat = Applications.application2a(image);
+            afficherAvantApres("Traitement (a) - Avant / Après", image, resultat);
+        } catch (IOException | CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemApplication2ActionPerformed
 
     /**
      * @param args the command line arguments
