@@ -4,6 +4,7 @@ import CImage.*;
 import CImage.Exceptions.*;
 import CImage.Observers.*;
 import CImage.Observers.Events.*;
+import ImageProcessing.Applications.Applications;
 import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Contours.ContoursLineaire;
 import ImageProcessing.Contours.ContoursNonLineaire;
@@ -147,6 +148,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemSeuillageSimple = new javax.swing.JMenuItem();
         jMenuItemSeuillageDouble = new javax.swing.JMenuItem();
         jMenuItemSeuillageAutomatique = new javax.swing.JMenuItem();
+        jMenuApplications = new javax.swing.JMenu();
+        jMenuItemApplication1 = new javax.swing.JMenuItem();
+        jMenuItemApplication2 = new javax.swing.JMenuItem();
+        jMenuItemApplication3 = new javax.swing.JMenuItem();
+        jMenuItemApplication4 = new javax.swing.JMenuItem();
+        jMenuItemApplication5 = new javax.swing.JMenuItem();
+        jMenuItemApplication6 = new javax.swing.JMenuItem();
+        jMenuItemApplication7 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -625,6 +634,37 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuSeuillage);
 
+        jMenuApplications.setText("Applications");
+
+        jMenuItemApplication1.setText("Application 1");
+        jMenuItemApplication1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemApplication1ActionPerformed(evt);
+            }
+        });
+        jMenuApplications.add(jMenuItemApplication1);
+
+        jMenuItemApplication2.setText("Application 2");
+        jMenuItemApplication2.setToolTipText("");
+        jMenuApplications.add(jMenuItemApplication2);
+
+        jMenuItemApplication3.setText("Application 3");
+        jMenuApplications.add(jMenuItemApplication3);
+
+        jMenuItemApplication4.setText("Application 4");
+        jMenuApplications.add(jMenuItemApplication4);
+
+        jMenuItemApplication5.setText("Application 5");
+        jMenuApplications.add(jMenuItemApplication5);
+
+        jMenuItemApplication6.setText("Application 6");
+        jMenuApplications.add(jMenuItemApplication6);
+
+        jMenuItemApplication7.setText("Application 7");
+        jMenuApplications.add(jMenuItemApplication7);
+
+        jMenuBar1.add(jMenuApplications);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -633,7 +673,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1096, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1217, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -644,7 +684,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(1124, 528));
+        setSize(new java.awt.Dimension(1229, 528));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1902,6 +1942,80 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
     }//GEN-LAST:event_jMenuItemSeuillageAutomatiqueActionPerformed
 
+    private void afficherAvantApres(String titre, CImageNG avant, CImageNG apres) {
+        // Créer une nouvelle fenêtre (non modale)
+        JFrame frame = new JFrame(titre);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLayout(new GridLayout(1, 2)); // 2 colonnes : Avant / Après
+
+        // Créer les icônes
+        ImageIcon iconAvant = new ImageIcon(avant.getImage());
+        ImageIcon iconApres = new ImageIcon(apres.getImage());
+
+        // Créer les labels
+        JLabel labelAvant = new JLabel("Avant", JLabel.CENTER);
+        JLabel labelApres = new JLabel("Après", JLabel.CENTER);
+
+        JLabel imageAvant = new JLabel(iconAvant);
+        JLabel imageApres = new JLabel(iconApres);
+
+        // Créer les panneaux
+        JPanel panelAvant = new JPanel(new BorderLayout());
+        panelAvant.add(labelAvant, BorderLayout.NORTH);
+        panelAvant.add(imageAvant, BorderLayout.CENTER);
+
+        JPanel panelApres = new JPanel(new BorderLayout());
+        panelApres.add(labelApres, BorderLayout.NORTH);
+        panelApres.add(imageApres, BorderLayout.CENTER);
+
+        // Ajouter à la fenêtre
+        frame.add(panelAvant);
+        frame.add(panelApres);
+
+        frame.pack();
+        frame.setLocationRelativeTo(null); // Centre l'écran
+        frame.setVisible(true); // Affiche sans bloquer l'exécution
+    }
+
+
+    private void jMenuItemApplication1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplication1ActionPerformed
+        try {
+            // Charger directement les fichiers depuis les chemins connus
+            File fichier1 = new File("ImagesFournies/ImagesEtape5/imageBruitee1.png");
+            File fichier2 = new File("ImagesFournies/ImagesEtape5/imageBruitee2.png");
+            if (!fichier1.exists()) {
+                JOptionPane.showMessageDialog(this, "Fichier imageBruitee1.png introuvable.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!fichier2.exists()) {
+                JOptionPane.showMessageDialog(this, "Fichier imageBruitee2.png introuvable.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Création de l'objet imageNG depuis les fichiers
+            CImageNG image1 = new CImageNG(fichier1);
+            CImageNG image2 = new CImageNG(fichier2);
+            // Mise en matrices
+            int[][] mat1 = image1.getMatrice();
+            int[][] mat2 = image2.getMatrice();
+            // Traitement
+            int[][] resultat1 = Applications.application1image1(mat1);
+            int[][] resultat2 = Applications.application1image2(mat2);
+            // Sortie
+            CImageNG resultatImage1 = new CImageNG(resultat1);
+            CImageNG resultatImage2 = new CImageNG(resultat2);
+            
+            // Affiche les résultats dans des fenêtres popups
+            afficherAvantApres("Image 1 - Avant / Après", image1, resultatImage1);
+            afficherAvantApres("Image 2 - Avant / Après", image2, resultatImage2);
+            
+        } catch (CImageNGException | IOException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemApplication1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2031,6 +2145,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectanglePlein;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenuApplications;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuContours;
     private javax.swing.JMenu jMenuContoursLineaire;
@@ -2046,6 +2161,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuImage;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItemApplication1;
+    private javax.swing.JMenuItem jMenuItemApplication2;
+    private javax.swing.JMenuItem jMenuItemApplication3;
+    private javax.swing.JMenuItem jMenuItemApplication4;
+    private javax.swing.JMenuItem jMenuItemApplication5;
+    private javax.swing.JMenuItem jMenuItemApplication6;
+    private javax.swing.JMenuItem jMenuItemApplication7;
     private javax.swing.JMenuItem jMenuItemCorrectionGamma;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemDilatation;
