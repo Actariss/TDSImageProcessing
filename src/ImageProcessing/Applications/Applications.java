@@ -88,9 +88,57 @@ public class Applications
         return result;
     }
     
-    public static void application4(int[][] image)
+    private static int[][] appliquerMasque(int[][] imageOriginale, int[][] masque) {
+        int M = imageOriginale.length;
+        int N = imageOriginale[0].length;
+        int[][] result = new int[M][N];
+        
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                if (masque[i][j] == 255) {
+                    result[i][j] = imageOriginale[i][j];
+                } else {
+                    result[i][j] = 0; // Fond noir
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    
+    private static int[][] soustraction(int[][] origine, int[][] aSoustraire)
     {
         // TODO
+        int l = origine.length;
+        int h = origine[0].length;
+        int[][] res = new int[l][h];
+        for(int i=0;i<l;i++)
+            for(int j=0;j<h;j++)
+                res[i][j] = Math.max(0, origine[i][j] - aSoustraire[i][j]);
+        return res;
+    }
+    
+    
+    public static Map<String,int[][]> application4(int[][] image) {
+        int[][] binaire = Seuillage.seuillageAutomatique(image);
+
+        int[][] marqueur = MorphoElementaire.erosion(binaire, 11);
+        int[][] grosMasque = MorphoComplexe.reconstructionGeodesique(marqueur, binaire);
+
+
+        int[][] petitsMasque = soustraction(binaire, grosMasque);
+
+        grosMasque = MorphoElementaire.fermeture(grosMasque, 3);
+        petitsMasque = MorphoElementaire.ouverture(petitsMasque, 3);
+
+        int[][] gros = appliquerMasque(image, grosMasque);
+        int[][] petits = appliquerMasque(image, petitsMasque);
+
+        Map<String,int[][]> res = new HashMap<>();
+        res.put("GROS", gros);
+        res.put("PETITS", petits);
+        return res;
     }
     
     public static void application5(int[][] image)
