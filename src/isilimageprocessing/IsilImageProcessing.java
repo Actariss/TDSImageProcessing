@@ -663,6 +663,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuApplications.add(jMenuItemApplication3);
 
         jMenuItemApplication4.setText("Application 4");
+        jMenuItemApplication4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemApplication4ActionPerformed(evt);
+            }
+        });
         jMenuApplications.add(jMenuItemApplication4);
 
         jMenuItemApplication5.setText("Application 5");
@@ -2069,6 +2074,26 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemApplication3ActionPerformed
+
+    private void jMenuItemApplication4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplication4ActionPerformed
+        try {
+            File fichier = new File("ImagesFournies/ImagesEtape5/balanes.png");
+            if (!fichier.exists()) {
+                JOptionPane.showMessageDialog(this, "Fichier balanes.png introuvable.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            CImageNG image = new CImageNG(fichier);
+            int[][] matrice = image.getMatrice();
+            Map<String,int[][]> res = Applications.application4(matrice);
+            CImageNG gros = new CImageNG(res.get("GROS"));
+            CImageNG petits = new CImageNG(res.get("PETITS"));
+            afficherAvantApres("Balanes grandes", image, gros);
+            afficherAvantApres("Balanes petites", image, petits);
+        } catch (IOException | CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemApplication4ActionPerformed
 
     /**
      * @param args the command line arguments
