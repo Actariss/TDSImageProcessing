@@ -113,10 +113,25 @@ public class Applications
         int l = origine.length;
         int h = origine[0].length;
         int[][] res = new int[l][h];
-        for(int i=0;i<l;i++)
-            for(int j=0;j<h;j++)
+        for(int i=0;i<l;i++) {
+            for(int j=0;j<h;j++) {
                 res[i][j] = Math.max(0, origine[i][j] - aSoustraire[i][j]);
+            }
+        }
         return res;
+    }
+    public static int[][] addition(int[][] origine, int[][] aAdditionner) {
+        int imageHeight = origine.length;
+        int imageWidth = origine[0].length;
+        
+        int[][] output = new int[imageHeight][imageWidth];
+        
+        for (int i = 0; i < imageHeight; i++) {
+            for (int j = 0; j < imageWidth; j++) {
+                output[i][j] = Math.min(255, origine[i][j] + aAdditionner[i][j]);
+            }
+        }
+        return output;
     }
     
     
@@ -141,9 +156,32 @@ public class Applications
         return res;
     }
     
-    public static void application5(int[][] image)
+    
+    
+    public static Map<String,int[][]> application5(int[][] image)
     {
-        // TODO
+        // Égalistion de l'Histogramme
+        int[] courbe = Histogramme.creeCourbeTonaleEgalisation(image);
+        int[][] eq = Histogramme.rehaussement(image, courbe);
+        // Seuillage zones claires
+        int[][] seuil220 = Seuillage.seuillageSimple(eq, 220);
+        // Seuillage (récupération de la clé)
+        int[][] seuil160 = Seuillage.seuillageSimple(eq, 159);
+        // Ouverture géodésique (On crée le filtre  pour prendre l'image sans la clé)
+        int[][] ouvert = MorphoElementaire.ouverture(seuil160, 15);
+        // Reconstruction géodésique (On crée l'image sans clé)
+        int[][] recon = MorphoComplexe.reconstructionGeodesique(seuil160, ouvert);
+        // Soustraction de l'image avec clé par l'image sans clé pour isoler la clé
+        int[][] cle = soustraction(seuil160, recon);
+        // Fusion de la clé avec l'image où la clé n'est plus visible
+        int[][] outils = addition(seuil220, cle);
+        // Ouverture 3 (pour retirer les inpuretés)
+        int[][] nettoye = MorphoElementaire.ouverture(outils, 3);
+        Map<String,int[][]> res = new HashMap<>();
+        res.put("outils",nettoye);
+        return res;
+        
+
     }
     
     public static void application6(int[][] image)
