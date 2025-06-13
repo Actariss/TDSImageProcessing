@@ -671,6 +671,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuApplications.add(jMenuItemApplication4);
 
         jMenuItemApplication5.setText("Application 5");
+        jMenuItemApplication5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemApplication5ActionPerformed(evt);
+            }
+        });
         jMenuApplications.add(jMenuItemApplication5);
 
         jMenuItemApplication6.setText("Application 6");
@@ -2094,6 +2099,24 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemApplication4ActionPerformed
+
+    private void jMenuItemApplication5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplication5ActionPerformed
+       try {
+            File fichier = new File("ImagesFournies/ImagesEtape5/tools.png");
+            if (!fichier.exists()) {
+                JOptionPane.showMessageDialog(this, "Fichier tools.png introuvable.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            CImageNG image = new CImageNG(fichier);
+            int[][] matrice = image.getMatrice();
+            Map<String,int[][]> res = Applications.application5(matrice);
+            CImageNG outils = new CImageNG(res.get("outils"));
+            afficherAvantApres("Balanes grandes", image, outils);
+        } catch (IOException | CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }                                                  
+    }//GEN-LAST:event_jMenuItemApplication5ActionPerformed
 
     /**
      * @param args the command line arguments
