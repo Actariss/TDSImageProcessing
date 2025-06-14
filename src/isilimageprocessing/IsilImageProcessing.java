@@ -679,6 +679,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuApplications.add(jMenuItemApplication5);
 
         jMenuItemApplication6.setText("Application 6");
+        jMenuItemApplication6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemApplication6ActionPerformed(evt);
+            }
+        });
         jMenuApplications.add(jMenuItemApplication6);
 
         jMenuItemApplication7.setText("Application 7");
@@ -2117,6 +2122,39 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }                                                  
     }//GEN-LAST:event_jMenuItemApplication5ActionPerformed
+
+    private void jMenuItemApplication6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplication6ActionPerformed
+        try {
+            File fichierVaisseaux = new File("ImagesFournies/ImagesEtape5/vaisseaux.jpg");
+            File fichierPlanete = new File("ImagesFournies/ImagesEtape5/planete.jpg");
+
+            if (!fichierVaisseaux.exists()) {
+                JOptionPane.showMessageDialog(this, "Fichier vaisseaux.jpg introuvable.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!fichierPlanete.exists()) {
+                JOptionPane.showMessageDialog(this, "Fichier planete.jpg introuvable.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            CImageRGB vaisseaux = new CImageRGB(fichierVaisseaux);
+            CImageRGB planete = new CImageRGB(fichierPlanete);
+            CImageNG vaisseauxNG = new CImageNG(fichierVaisseaux);
+
+            int[][] matriceNG = vaisseauxNG.getMatrice();
+            Map<String,CImageRGB> resultat = Applications.application6(matriceNG, vaisseaux, planete);
+
+            afficherAvantApres("Application 6 - Synthèse", vaisseaux, resultat.get("SYN1"));
+            afficherAvantApres("Application 6 - Avec contour", resultat.get("SYN1"), resultat.get("SYN2"));
+
+        } catch (IOException | CImageRGBException | CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Erreur lors du traitement : " + ex.getMessage(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItemApplication6ActionPerformed
 
     /**
      * @param args the command line arguments
