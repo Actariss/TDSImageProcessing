@@ -2117,7 +2117,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             int[][] matrice = image.getMatrice();
             Map<String,int[][]> res = Applications.application5(matrice);
             CImageNG outils = new CImageNG(res.get("outils"));
-            afficherAvantApres("Balanes grandes", image, outils);
+            afficherAvantApres("Tools", image, outils);
         } catch (IOException | CImageNGException ex) {
             Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }                                                  
