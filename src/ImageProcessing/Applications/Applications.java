@@ -206,14 +206,14 @@ public class Applications
         // Nettoyage du petit vaisseau
         int[][] opened = MorphoElementaire.ouverture(petitVaisseau, 13);
 
-        // ✅ Reconstruction sur **imageVaisseaux** pour un masque complet
+        // Reconstruction sur **imageVaisseaux** pour un masque complet
         int[][] finalMask = MorphoComplexe.reconstructionGeodesique(opened, imageVaisseaux);
 
-        // ✅ Fermeture plus forte pour combler les trous
+        // Fermeture plus forte pour combler les trous
         int[][] masquePlein = MorphoElementaire.fermeture(finalMask, 9);
         masquePlein = Seuillage.seuillageSimple(masquePlein, 30);
 
-        // ✅ Détection des contours avec gradient 
+        // Détection des contours avec gradient 
         int[][] contour = ContoursNonLineaire.gradientBeucher(masquePlein);
         contour = Seuillage.seuillageSimple(contour, 1);
         contour = MorphoElementaire.dilatation(contour, 3); // pour l'épaissir un peu
