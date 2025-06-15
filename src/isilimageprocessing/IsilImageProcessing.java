@@ -687,6 +687,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuApplications.add(jMenuItemApplication6);
 
         jMenuItemApplication7.setText("Application 7");
+        jMenuItemApplication7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemApplication7ActionPerformed(evt);
+            }
+        });
         jMenuApplications.add(jMenuItemApplication7);
 
         jMenuBar1.add(jMenuApplications);
@@ -2155,6 +2160,26 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                     "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItemApplication6ActionPerformed
+
+    private void jMenuItemApplication7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplication7ActionPerformed
+        try {
+            File fichier = new File("ImagesFournies/ImagesEtape5/Tartines.jpg");
+            if (!fichier.exists()) {
+                JOptionPane.showMessageDialog(this, "Fichier Tartines.jpg introuvable.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            CImageNG image = new CImageNG(fichier);
+            CImageRGB imageCouleur = new CImageRGB(fichier);
+            int[][] matrice = image.getMatrice();
+            Map<String,CImageRGB> res = Applications.application7(matrice, imageCouleur);
+      
+            CImageRGB tartine = res.get("Tartines");
+            afficherAvantApres("Tartines", image, tartine);
+        } catch (IOException | CImageNGException | CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }                                           
+    }//GEN-LAST:event_jMenuItemApplication7ActionPerformed
 
     /**
      * @param args the command line arguments
