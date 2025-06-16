@@ -1067,8 +1067,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             String input = JOptionPane.showInputDialog(this, "Fréquence de coupure :");
             if (input == null) return; // Annulé
             int fc = Integer.parseInt(input);
+            String ordre = JOptionPane.showInputDialog(this, "Ordre du filtre :");
+            if (ordre == null) return; // Annulé
+            int intOrdre = Integer.parseInt(ordre);
             var img = imageNG.getMatrice();
-            int[][] matriceFiltree = FiltrageLineaireGlobal.filtrePasseBasButterworth(img, fc, 1);
+            int[][] matriceFiltree = FiltrageLineaireGlobal.filtrePasseBasButterworth(img, fc, intOrdre);
             CImageNG imagefiltree = new CImageNG(matriceFiltree);
             observer.setCImage(imagefiltree);
             // Appel au traitement (à adapter à ton système d’image)
@@ -1091,8 +1094,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             String input = JOptionPane.showInputDialog(this, "Fréquence de coupure :");
             if (input == null) return; // Annulé
             int fc = Integer.parseInt(input);
+            String ordre = JOptionPane.showInputDialog(this, "Ordre du filtre :");
+            if (ordre == null) return; // Annulé
+            int intOrdre = Integer.parseInt(ordre);
             var img = imageNG.getMatrice();
-            int[][] matriceFiltree = FiltrageLineaireGlobal.filtrePasseHautButterworth(img, fc, 1);
+            int[][] matriceFiltree = FiltrageLineaireGlobal.filtrePasseHautButterworth(img, fc, intOrdre);
             CImageNG imagefiltree = new CImageNG(matriceFiltree);
             observer.setCImage(imagefiltree);
             // Appel au traitement (à adapter à ton système d’image)
