@@ -8,15 +8,10 @@ import ImageProcessing.Histogramme.Histogramme;
 import ImageProcessing.NonLineaire.MorphoComplexe;
 import ImageProcessing.NonLineaire.MorphoElementaire;
 import ImageProcessing.Contours.ContoursNonLineaire;
-import ImageProcessing.Contours.ContoursLineaire;
 import ImageProcessing.Seuillage.Seuillage;
 import ImageProcessing.Utils.Utils;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.io.File;
-import java.io.IOException;
 
 public class Applications 
 {
