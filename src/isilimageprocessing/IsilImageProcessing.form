@@ -377,7 +377,7 @@
           <SubComponents>
             <Menu class="javax.swing.JMenu" name="jMenuMorphoElementaire">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Morpho Elementaire"/>
+                <Property name="text" type="java.lang.String" value="Elementaire"/>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemErosion">
@@ -416,7 +416,7 @@
             </Menu>
             <Menu class="javax.swing.JMenu" name="jMenuMorphoComplexe">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Morpho Complexe"/>
+                <Property name="text" type="java.lang.String" value="Complexe"/>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemDilatationGeo">

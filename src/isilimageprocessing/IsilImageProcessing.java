@@ -463,7 +463,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuFiltrageNonLineaire.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/non-linear-icon.png"))); // NOI18N
         jMenuFiltrageNonLineaire.setText("Transformation Non-Linéaire");
 
-        jMenuMorphoElementaire.setText("Morpho Elementaire");
+        jMenuMorphoElementaire.setText("Elementaire");
 
         jMenuItemErosion.setText("Erosion");
         jMenuItemErosion.addActionListener(new java.awt.event.ActionListener() {
@@ -499,7 +499,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuFiltrageNonLineaire.add(jMenuMorphoElementaire);
 
-        jMenuMorphoComplexe.setText("Morpho Complexe");
+        jMenuMorphoComplexe.setText("Complexe");
 
         jMenuItemDilatationGeo.setText("Dilatation Geodesique");
         jMenuItemDilatationGeo.addActionListener(new java.awt.event.ActionListener() {
