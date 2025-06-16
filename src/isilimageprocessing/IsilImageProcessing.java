@@ -14,6 +14,7 @@ import ImageProcessing.Lineaire.*;
 import ImageProcessing.NonLineaire.MorphoComplexe;
 import ImageProcessing.NonLineaire.MorphoElementaire;
 import ImageProcessing.Seuillage.Seuillage;
+import ImageProcessing.Utils.Utils;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
 import java.io.*;
@@ -1410,6 +1411,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
             // Récupérer la matrice de l'image
             int[][] img = imageNG.getMatrice();
+            if (Utils.isBinary(img)){
+                JOptionPane.showMessageDialog(this, "L'image ne doit pas être binaire.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             // Appliquer l'erosion
             int[][] matriceFermee = MorphoComplexe.filtreMedian(img, tailleMasque);
